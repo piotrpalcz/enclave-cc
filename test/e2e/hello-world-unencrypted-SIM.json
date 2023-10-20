@@ -6,7 +6,8 @@
     "image": "docker.io/huaijin20191223/scratch-base:v1.8"
   },
   "envs": [
-    {"key": "OCCLUM_RELEASE_ENCLAVE", "value": "0"}
+    {"key": "OCCLUM_RELEASE_ENCLAVE", "value": "0"},
+    {"key": "OCCLUM_LOG_LEVEL", "value": "trace"}
   ],
   "command": [
     "/run/rune/boot_instance/build/bin/occlum-run",
