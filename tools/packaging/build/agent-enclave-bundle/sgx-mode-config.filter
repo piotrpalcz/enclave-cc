@@ -1,4 +1,4 @@
-if $ENV.SGX_MODE == "SIM" then
+if true then
 .process.env |= . + ["OCCLUM_RELEASE_ENCLAVE=0"]
 else
 .process.env |= . + ["OCCLUM_RELEASE_ENCLAVE=1", "SGX_AESM_ADDR=1"] |
