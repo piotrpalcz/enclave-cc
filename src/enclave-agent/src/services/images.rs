@@ -81,7 +81,6 @@ impl protocols::image_ttrpc::Image for ImageService {
     ) -> ttrpc::Result<image::PullImageResponse> {
         match self.pull_image(&req).await {
             Ok(r) => {
-                info!("DEBUGOWA WIADOMOSC");
                 info!("Pull image {:?} successfully", r);
                 let mut resp = image::PullImageResponse::new();
                 resp.image_ref = r;
@@ -118,4 +117,3 @@ mod test {
         assert_eq!(res.is_ok(), is_ok, "err: {:?}", res);
     }
 }
-

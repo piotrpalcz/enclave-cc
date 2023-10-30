@@ -16,18 +16,11 @@ use std::ffi::CString;
 use std::mem::size_of;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // TODO: Get the rootfs key and other parameters through RA/LA or PAL
-    // let rootfs_key = b"c7-32-b3-ed-44-df-ec-7b-25-2d-9a-32-38-8d-58-61";
     let rootfs_upper_layer = "/sefs/upper";
     let rootfs_lower_layer = "/sefs/lower";
     let rootfs_entry = "/";
 
-// new mounting
-    // let create_dir_path = "/run/rune/boot_instance/initfs/mnt";
-    // match fs::create_dir_all("/run/rune/boot_instance/initfs/mnt") {
-    //     Ok(_) => println!("Directory '{}' created successfully!", create_dir_path),
-    //     Err(err) => eprintln!("Error creating directory '{}': {}", create_dir_path, err),
-    // }
+    // Create and mount directory for fs key from agent enclave
     fs::create_dir("/mnt");
     let fs_type = String::from("hostfs");
     let source = Path::new("/host");
@@ -44,23 +37,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     ).unwrap_or_else(|e| panic!("mount failed: {e}"));
 
     let KEY_FILE : &str = "/mnt/key.txt";
-    let foobar_key = load_key(KEY_FILE)?;
-    println!("foobar key {}",foobar_key);
     
-    // Get the key of FS image if needed
+    // Get the key of FS image
     let key = {
-        // const IMAGE_KEY_FILE: &str = "/etc/image_key";
-        // // TODO: Get the key through RA or LA
-        // let mut file = File::create(IMAGE_KEY_FILE)?;
-        // // Writes key.
-        // file.write_all(foobar_key)?;
 
         let key_str = load_key(KEY_FILE)?;
         let mut key: sgx_key_128bit_t = Default::default();
         parse_str_to_bytes(&key_str, &mut key)?;
         Some(key)
     };
-    println!("Running new version with key from file!");
 
     let key_ptr = key
         .as_ref()
@@ -69,10 +54,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Mount the image
     const SYS_MOUNT_FS: i64 = 363;
-   println!("Iterating mnt");
-    for file in fs::read_dir("/mnt").unwrap() {
-     println!("{}", file.unwrap().path().display());
-   }
 
     // Example envs. must end with null
     let env1 = CString::new("TEST=1234").unwrap();
