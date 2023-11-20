@@ -66,7 +66,7 @@ COPY tools/packaging/build/unified-bundle/boot_template.yaml .
 COPY tools/packaging/build/unified-bundle/init.yaml .
 COPY tools/packaging/build/unified-bundle/agent-instance.filter .
 
-ARG SGX_MODE=HW
+ARG SGX_MODE=SIM
 RUN export PATH="$PATH:/opt/occlum/build/bin" && \
     occlum new occlum_instance && cd occlum_instance && \
     copy_bom -f ../enclave-agent-${KBC}.yaml --root image \
@@ -118,4 +118,5 @@ RUN tar xf occlum_instance.tar.gz && \
     ldconfig && \
     /opt/occlum/sgxsdk-tools/bin/x64/sgx_sign dump -dumpfile /run/agent.txt -cssfile /run/sigstruct1.bin -enclave occlum_instance/build/lib/libocclum-libos.signed.so && \
     mkdir /configs && \
+    mkdir /keys  && \
     rm *.tar.gz

@@ -7,7 +7,6 @@ use libc::syscall;
 use nix::mount::MsFlags;
 use std::env;
 use std::error::Error;
-use std::ffi::CString;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
@@ -15,7 +14,6 @@ use std::io::{ErrorKind, Read};
 
 use anyhow::{anyhow, Result};
 use std::ffi::CString;
-use std::fs;
 use std::mem::size_of;
 use std::path::{Path, PathBuf};
 
@@ -25,6 +23,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let rootfs_entry = "/";
 
     // Create and mount directory for fs key from agent enclave
+    println!("DEBUGGING BOOT CONTAINER");
     fs::create_dir("/mnt");
     let fs_type = String::from("hostfs");
     let source = Path::new("/host");

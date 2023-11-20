@@ -1,5 +1,5 @@
-if $ENV.SGX_MODE == "SIM" then
-.process.env |= . + ["OCCLUM_RELEASE_ENCLAVE=0"]
+if true then
+.process.env |= . + ["OCCLUM_RELEASE_ENCLAVE=0", "OCCLUM_LOG_LEVEL=trace"]
 else
 .process.env |= . + ["OCCLUM_RELEASE_ENCLAVE=1", "SGX_AESM_ADDR=1"] |
 .linux.devices |= . +
