@@ -44,14 +44,22 @@ fn main() -> Result<(), Box<dyn Error>> {
             let flags = MsFlags::empty();
             let source_c = CString::new(source.to_str().unwrap()).unwrap();
             let mountpoint_c = CString::new(mount_path.to_str().unwrap()).unwrap();
+
+            let options = format!(
+                "dir={}",
+                Path::new("/keys").display()//Path::new("/keys").join("scratch-base_v1.8").join("lower").display(),
+                
+            );
             nix::mount::mount(
                 Some(fs_type.as_str()),
                 mountpoint_c.as_c_str(),
                 Some(fs_type.as_str()),
                 flags,
-                Some("dir=/keys"),
+                Some(options.as_str()),
             )
-            .unwrap_or_else(|e| panic!("mount failed: {e}"));
+            .unwrap_or_else(|err| {
+                eprintln!("Error reading file: {}", err);
+        });
             
             let root_path = "/"; // Change this to the root path you want to start from
             let depth = 2; // Set the desired depth
